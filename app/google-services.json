@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "865618863190",
+    "firebase_url": "https://uploadaudioimage.firebaseio.com",
+    "project_id": "uploadaudioimage",
+    "storage_bucket": "uploadaudioimage.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:865618863190:android:f445f7cf6a3f22f1",
+        "android_client_info": {
+          "package_name": "ventura.mendoza.alex.uploadaudioimage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "865618863190-ipb6s0r16pgftq3gs72sn2bv5gt3dli1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ventura.mendoza.alex.uploadaudioimage",
+            "certificate_hash": "D4FDF6D5F023DE25106B9BEE0F75AC32BCC9F966"
+          }
+        },
+        {
+          "client_id": "865618863190-s74kpf8h9mg4c2gg9k8dpdso9uk2tkv4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATRxsn2kEXuiQqb_7vjTXFtkE31Hczjok"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "865618863190-s74kpf8h9mg4c2gg9k8dpdso9uk2tkv4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

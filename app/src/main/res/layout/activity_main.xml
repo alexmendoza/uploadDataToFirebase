@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="ventura.mendoza.alex.uploadaudioimage.MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Parques y Jardines"
+        tools:textSize="30sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/textView" />
+
+    <TextView
+        android:text="Numero Contacto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="54dp"
+        android:id="@+id/textView2"
+        android:layout_alignParentStart="true"
+        android:textSize="18sp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:layout_below="@+id/textView2"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="14dp"
+        android:id="@+id/editText" />
+
+    <TextView
+        android:text="Detalle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="19dp"
+        android:id="@+id/textView3"
+        android:textSize="18sp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:layout_below="@+id/textView3"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="17dp"
+        android:id="@+id/editText2"
+        android:singleLine="false" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/botonEnviuar"
+        android:layout_toEndOf="@+id/textView2"
+        android:layout_marginTop="18dp"
+        android:id="@+id/recordLabel"
+        android:textSize="18sp" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/camera"
+        android:layout_marginTop="35dp"
+        android:id="@+id/imageButton"
+        android:background="@drawable/btn_circle_default"
+        android:layout_below="@+id/editText2"
+        android:layout_alignParentStart="true" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/microphone"
+        android:id="@+id/mRecordBtn"
+        android:background="@drawable/btn_circle_default"
+        android:layout_marginEnd="18dp"
+        android:layout_above="@+id/botonEnviuar"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:text="Enviar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/botonEnviuar"
+        android:layout_marginTop="35dp"
+        android:layout_below="@+id/imageButton"
+        android:layout_alignStart="@+id/recordLabel" />
+</RelativeLayout>

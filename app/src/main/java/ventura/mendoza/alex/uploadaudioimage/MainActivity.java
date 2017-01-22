@@ -1,17 +1,22 @@
 package ventura.mendoza.alex.uploadaudioimage;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -26,14 +31,20 @@ public class MainActivity extends AppCompatActivity {
     private MediaRecorder mRecorder;
     private String mFileName = null;
     private static final String LOG_TAG = "Record_Log";
-    private StorageReference mStorage;
+    private StorageReference mStorageAudio;
     private ProgressDialog mProgress;
+    //image
+    private ImageButton mSelectImage;
+    private StorageReference mStorageImage;
+    private static final int GALLERY_INTENT = 2;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mStorage = FirebaseStorage.getInstance().getReference();
+        //Audio
+        mStorageAudio = FirebaseStorage.getInstance().getReference();
 
         mRecordLabel = (TextView)findViewById(R.id.recordLabel);
         mRecordBtn = (ImageButton) findViewById(R.id.mRecordBtn);
@@ -57,7 +68,22 @@ public class MainActivity extends AppCompatActivity {
                 return  false;
             }
         });
+        //Img
+        mStorageImage = FirebaseStorage.getInstance().getReference();
+
+        mSelectImage = (ImageButton) findViewById(R.id.mUploadImageFromGallery);
+
+        mProgressDialog = new ProgressDialog(this);
+        mSelectImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, GALLERY_INTENT);
+            }
+        });
     }
+    //Audio
     private void startRecording() {
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -83,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
     private void uploadAudio() {
         mProgress.setMessage("Uploading audio...");
         mProgress.show();
-        StorageReference filepath = mStorage.child("Audio").child("new_audio.3gp");
+        StorageReference filepath = mStorageAudio.child("Audio").child("new_audio.3gp");
         Uri uri = Uri.fromFile(new File(mFileName));
         filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -92,5 +118,28 @@ public class MainActivity extends AppCompatActivity {
                 mRecordLabel.setText("Uploading Finished");
             }
         });
+    }
+    //Image
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GALLERY_INTENT && resultCode == RESULT_OK){
+            mProgressDialog.setMessage("Uploading...");
+            mProgressDialog.show();
+            Uri uri = data.getData();
+            StorageReference filepath = mStorageImage.child("Photos").child(uri.getLastPathSegment());
+            filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Toast.makeText(MainActivity.this, "Upload done", Toast.LENGTH_LONG).show();
+                    mProgressDialog.dismiss();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                }
+            });
+        }
     }
 }

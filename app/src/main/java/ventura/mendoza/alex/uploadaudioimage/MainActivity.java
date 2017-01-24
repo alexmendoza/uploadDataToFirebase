@@ -2,9 +2,11 @@ package ventura.mendoza.alex.uploadaudioimage;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -12,13 +14,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -39,6 +44,16 @@ public class MainActivity extends AppCompatActivity {
     private ProgressDialog mProgressDialog;
     //Selectable image
     private ImageButton mSelectableImage;
+    //ImageView
+    private ImageView imageView;
+    private static final int PICK_IMAGE_REQUEST=200;
+    private static final int CAMERA_REQUEST_CODE = 300;
+    private Uri filepath;
+    private StorageReference Storage;
+    private Button btnSend;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +88,9 @@ public class MainActivity extends AppCompatActivity {
 
         mProgressDialog = new ProgressDialog(this);
 
-     //Selectable Origin image
+        /****
+         * Abrir Cuadro de Dialogo
+         */
         mSelectableImage = (ImageButton)findViewById(R.id.mSelectOriginImage);
         mSelectableImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,10 +113,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Toast.makeText(MainActivity.this, "Haz seleccionado la galeria",Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(Intent.ACTION_PICK);
-                        intent.setType("image/*");
-                        startActivityForResult(intent, GALLERY_INTENT);
-
+                        showFileImage();
                     }
                 });
                 mBuilder.setView(mView);
@@ -107,10 +121,26 @@ public class MainActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
+        //ImagenPreview
+        imageView = (ImageView)findViewById(R.id.img);
+        Storage= FirebaseStorage.getInstance().getReference();
+        btnSend = (Button)findViewById(R.id.btnSend);
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadFile();gi
+            }
+        });
+
     }
 
+    /***
+     * Cerrar Cuadro de dialogo
+     */
 
-    //Audio
+    /*****
+     * Audio
+     */
     private void startRecording() {
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -132,7 +162,6 @@ public class MainActivity extends AppCompatActivity {
         mRecorder = null;
         uploadAudio();
     }
-
     private void uploadAudio() {
         mProgress.setMessage("Uploading audio...");
         mProgress.show();
@@ -148,27 +177,91 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-    //Image
+    /****
+     * Finish audio
+     */
+
+    /****
+     *Img
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GALLERY_INTENT && resultCode == RESULT_OK){
-            mProgressDialog.setMessage("Uploading...");
-            mProgressDialog.show();
-            Uri uri = data.getData();
-            StorageReference filepath = mStorageImage.child("Photos").child(uri.getLastPathSegment());
-            filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(MainActivity.this, "Upload done", Toast.LENGTH_LONG).show();
-                    mProgressDialog.dismiss();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            filepath = data.getData();
 
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filepath);
+                imageView.setImageBitmap(bitmap);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        } else if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+
+            filepath = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filepath);
+                imageView.setImageBitmap(bitmap);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    private void uploadFile()
+    {
+
+        if (filepath !=null) {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Cargando...");
+            progressDialog.show();
+            StorageReference riversRef = Storage.child("images/profile.jpg");
+
+            riversRef.putFile(filepath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // Get a URL to the uploaded content
+                            progressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(), "Archivo cargado", Toast.LENGTH_LONG).show();
+
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            progressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+
+                    double progress=(100.0*taskSnapshot.getBytesTransferred())/taskSnapshot.getTotalByteCount();
+                    progressDialog.setMessage(((int) progress)+"% Cargando...");
                 }
             });
         }
     }
+
+    private void  showFileImage()
+    {
+        Intent intent= new Intent();
+        intent.setType("image/*");
+        intent.setAction(intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent.createChooser(intent, "seleccionar imagen"), PICK_IMAGE_REQUEST);
+    }
+    /****
+     * Finish Img
+     */
+
+
+
+
+
+
+
 }

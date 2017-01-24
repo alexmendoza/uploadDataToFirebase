@@ -6,12 +6,12 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private StorageReference mStorageImage;
     private static final int GALLERY_INTENT = 2;
     private ProgressDialog mProgressDialog;
-
+//Selectable image
+    private ImageButton mSelectableImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +83,44 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, GALLERY_INTENT);
             }
         });
+
+     //Selectable Origin image
+        mSelectableImage = (ImageButton)findViewById(R.id.mSelectOriginImage);
+        mSelectableImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
+                View mView = getLayoutInflater().inflate(R.layout.dialog_selectable_image_origin, null);
+                final ImageButton btnImagenGallery = (ImageButton) mView.findViewById(R.id.imgBtnGallery);
+                final ImageButton btnImageCamera = (ImageButton)mView.findViewById(R.id.imgBtnCamera);
+
+
+                btnImageCamera.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(MainActivity.this, "Haz seleccionado la camera", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+                btnImagenGallery.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(MainActivity.this, "Haz seleccionado la galeria",Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(Intent.ACTION_PICK);
+                        intent.setType("image/*");
+                        startActivityForResult(intent, GALLERY_INTENT);
+
+                    }
+                });
+                mBuilder.setView(mView);
+                AlertDialog dialog = mBuilder.create();
+                dialog.show();
+            }
+        });
     }
+
+
     //Audio
     private void startRecording() {
         mRecorder = new MediaRecorder();
@@ -118,6 +156,8 @@ public class MainActivity extends AppCompatActivity {
                 mRecordLabel.setText("Uploading Finished");
             }
         });
+
+
     }
     //Image
     @Override

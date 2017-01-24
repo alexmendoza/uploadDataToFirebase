@@ -98,4 +98,13 @@
         android:layout_marginTop="35dp"
         android:layout_below="@+id/mUploadImageFromGallery"
         android:layout_alignStart="@+id/recordLabel" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@mipmap/ic_launcher"
+        android:id="@+id/mSelectOriginImage"
+        android:background="@drawable/btn_circle_default"
+        android:layout_above="@+id/botonEnviuar"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

@@ -34,11 +34,10 @@ public class MainActivity extends AppCompatActivity {
     private StorageReference mStorageAudio;
     private ProgressDialog mProgress;
     //image
-    private ImageButton mSelectImage;
     private StorageReference mStorageImage;
     private static final int GALLERY_INTENT = 2;
     private ProgressDialog mProgressDialog;
-//Selectable image
+    //Selectable image
     private ImageButton mSelectableImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,17 +71,7 @@ public class MainActivity extends AppCompatActivity {
         //Img
         mStorageImage = FirebaseStorage.getInstance().getReference();
 
-        mSelectImage = (ImageButton) findViewById(R.id.mUploadImageFromGallery);
-
         mProgressDialog = new ProgressDialog(this);
-        mSelectImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                startActivityForResult(intent, GALLERY_INTENT);
-            }
-        });
 
      //Selectable Origin image
         mSelectableImage = (ImageButton)findViewById(R.id.mSelectOriginImage);

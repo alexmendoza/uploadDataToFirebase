@@ -64,21 +64,20 @@
         android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/botonEnviuar"
-        android:layout_toEndOf="@+id/textView2"
-        android:layout_marginTop="18dp"
         android:id="@+id/recordLabel"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:layout_marginStart="54dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/mSelectOriginImage" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/camera"
-        android:layout_marginTop="35dp"
-        android:id="@+id/mUploadImageFromGallery"
+        android:id="@+id/mSelectOriginImage"
         android:background="@drawable/btn_circle_default"
-        android:layout_below="@+id/editText2"
-        android:layout_alignParentStart="true" />
+        android:layout_alignTop="@+id/mRecordBtn"
+        android:layout_alignEnd="@+id/textView2" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -86,25 +85,16 @@
         app:srcCompat="@drawable/microphone"
         android:id="@+id/mRecordBtn"
         android:background="@drawable/btn_circle_default"
-        android:layout_marginEnd="18dp"
-        android:layout_above="@+id/botonEnviuar"
-        android:layout_alignParentEnd="true" />
+        android:layout_marginTop="41dp"
+        android:layout_below="@+id/editText2"
+        android:layout_alignEnd="@+id/textView" />
 
     <Button
         android:text="Enviar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/botonEnviuar"
-        android:layout_marginTop="35dp"
-        android:layout_below="@+id/mUploadImageFromGallery"
-        android:layout_alignStart="@+id/recordLabel" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/ic_launcher"
-        android:id="@+id/mSelectOriginImage"
-        android:background="@drawable/btn_circle_default"
-        android:layout_above="@+id/botonEnviuar"
-        android:layout_centerHorizontal="true" />
+        android:layout_above="@+id/recordLabel"
+        android:layout_toStartOf="@+id/mRecordBtn"
+        android:layout_marginBottom="29dp" />
 </RelativeLayout>
